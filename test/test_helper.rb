@@ -18,26 +18,28 @@ end
 # the following setting is specific to enable guard-jruby-minitest
 # for the excellent Newark framework and can be safely ignored
 # if you only are interested in knowing how DockTest
-class NewarkReloader
-  def self.run(*)
-    routes = Application.instance_variable_get(:@routes)
-    routes.each do |verb, route_array|
-      route_set = {}.tap do |rset|
-        route_array.each {|route| rset[route.instance_variable_get(:@path).to_s] = route}
+if defined?(::Guard)
+  class NewarkReloader
+    def self.run(*)
+      routes = Application.instance_variable_get(:@routes)
+      routes.each do |verb, route_array|
+        route_set = {}.tap do |rset|
+          route_array.each {|route| rset[route.instance_variable_get(:@path).to_s] = route}
+        end
+        routes[verb] = route_set.values
       end
-      routes[verb] = route_set.values
+      Application.instance_variable_set(:@routes, routes)
     end
-    Application.instance_variable_set(:@routes, routes)
   end
-end
 
-unless Guard::JRubyMinitest.reloaders.include?(NewarkReloader)
-  Guard::JRubyMinitest.reloaders << NewarkReloader
-  Application.class_eval do
-    def call(env)
-      # add the following line to copy the class variable to instance variable
-      @routes = self.class.instance_variable_get(:@routes)
-      dup._call(env)
+  unless Guard::JRubyMinitest.reloaders.include?(NewarkReloader)
+    Guard::JRubyMinitest.reloaders << NewarkReloader
+    Application.class_eval do
+      def call(env)
+        # add the following line to copy the class variable to instance variable
+        @routes = self.class.instance_variable_get(:@routes)
+        dup._call(env)
+      end
     end
   end
 end

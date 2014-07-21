@@ -75,6 +75,7 @@ DEPENDENCIES
   bundler
   dock_test (= 0.1.0)
   guard-jruby-minitest (= 0.1.7)
+  multi_json
   newark
   rake
   terminal-notifier-guard

@@ -4,6 +4,7 @@ source "https://rubygems.org"
 gem 'newark'
 gem 'rake'
 gem 'bundler'
+gem 'multi_json'
 
 group :test do
   gem 'guard-jruby-minitest', '0.1.7'
