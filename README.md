@@ -15,10 +15,12 @@ And then execute:
 
 And then run the test locally:
 
+    $ bundle exec rake test
     $ bundle exec ruby -Itest test/test_application.rb
 
 And then run the test against a production deployment (currently in heroku):
 
+    $ DOCK_ENV=production bundle exec rake test
     $ DOCK_ENV=production bundle exec ruby -Itest test/test_application.rb
 
 Please note that one of the tests with POST is skipped because the DockTest production environment `skippy` setting is `true`.
